@@ -354,7 +354,7 @@ nav.primary-nav a:hover {
   position: absolute;
   inset: 0;
   background: var(--bg);
-  opacity: 0.86;
+  opacity: 0.5;
   transition: background-color 0.25s ease;
 }
 .hero-grid {
