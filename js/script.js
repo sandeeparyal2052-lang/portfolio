@@ -66,7 +66,7 @@
       slides[current].classList.remove("is-active");
       current = (current + 1) % slides.length;
       slides[current].classList.add("is-active");
-    }, 6000);
+    }, 4000);
   }
 
   /* ---------- Gallery filter ---------- */
