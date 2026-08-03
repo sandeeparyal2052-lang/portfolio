@@ -282,7 +282,7 @@
   <section id="skills" class="section-tinted">
     <div class="wrap">
       <div class="section-header">
-        <h2>Skills</h2>
+        <h2>Skills & Engineering Tools</h2>
         <div class="dim-line"></div>
       </div>
 
@@ -327,6 +327,8 @@
           </div>
         </div>
       </div>
+
+
     </div>
   </section>
 
@@ -335,131 +337,27 @@
     <div class="wrap">
       <div class="section-header">
         <h2>Selected Projects</h2>
+        <p>Interactive engineering portfolio — click any project to view detailed structural specs & drawings.</p>
         <div class="dim-line"></div>
       </div>
 
-      <div class="project-grid">
+      <div class="project-controls">
+        <div class="filter-row" id="project-filter-row">
+          <button class="filter-btn active" data-category="All">All</button>
+          <button class="filter-btn" data-category="US Residential">US Residential</button>
+          <button class="filter-btn" data-category="Government DPR">Government DPR</button>
+          <button class="filter-btn" data-category="Water Infrastructure">Water Infrastructure</button>
+          <button class="filter-btn" data-category="Masterplanning">Masterplanning</button>
+        </div>
 
-        <article class="project-card reveal">
-          <div class="project-thumb"><img src="images/project-deck-parker.jpg" alt="New Deck & Roof — Permit Set" /></div>
-          <div class="project-body">
-            <h3>New Deck & Roof — Permit Set</h3>
-            <p class="project-loc">Parker, Colorado</p>
-            <p class="project-scope">New deck and roof structure designed and detailed for permit and construction.</p>
-            <div class="tag-row"><span class="tag">Structural Design</span><span class="tag">US Residential</span><span class="tag">Permit Drawings</span></div>
-            <dl class="project-meta">
-              <div><dt>Client</dt><dd>Meraki Outdoor Living</dd></div>
-              <div><dt>Year</dt><dd>2024</dd></div>
-              <div class="span-2"><dt>Role</dt><dd>Structural Design Engineer</dd></div>
-            </dl>
-          </div>
-        </article>
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="project-search-input" class="search-input" placeholder="Search projects by title, client, or tag..." />
+        </div>
+      </div>
 
-        <article class="project-card reveal">
-          <div class="project-thumb"><img src="images/project-deck-evergreen.jpg" alt="Replacement Steel Deck" /></div>
-          <div class="project-body">
-            <h3>Replacement Steel Deck</h3>
-            <p class="project-loc">Evergreen, Colorado</p>
-            <p class="project-scope">Steel deck replacement engineered and detailed for permit and construction.</p>
-            <div class="tag-row"><span class="tag">Structural Design</span><span class="tag">Steel Framing</span><span class="tag">Permit Drawings</span></div>
-            <dl class="project-meta">
-              <div><dt>Client</dt><dd>JAK Decks LLC</dd></div>
-              <div><dt>Year</dt><dd>2025</dd></div>
-              <div class="span-2"><dt>Role</dt><dd>Structural Design Engineer</dd></div>
-            </dl>
-          </div>
-        </article>
-
-        <article class="project-card reveal">
-          <div class="project-thumb"><img src="images/project-deck-springs.jpg" alt="Enclosed Deck Structure" /></div>
-          <div class="project-body">
-            <h3>Enclosed Deck Structure</h3>
-            <p class="project-loc">Colorado Springs, Colorado</p>
-            <p class="project-scope">Enclosed deck structure designed with stamped engineering drawings for permit.</p>
-            <div class="tag-row"><span class="tag">Structural Design</span><span class="tag">US Residential</span></div>
-            <dl class="project-meta">
-              <div><dt>Client</dt><dd>S&R Eagle Services, LLC</dd></div>
-              <div><dt>Year</dt><dd>2025</dd></div>
-              <div class="span-2"><dt>Role</dt><dd>Structural Design Engineer</dd></div>
-            </dl>
-          </div>
-        </article>
-
-        <article class="project-card reveal">
-          <div class="project-thumb"><img src="images/project-patio-denver.jpg" alt="Patio Cover & Garage Extension" /></div>
-          <div class="project-body">
-            <h3>Patio Cover & Garage Extension</h3>
-            <p class="project-loc">Denver, Colorado</p>
-            <p class="project-scope">New patio cover and garage extension engineered for permit and construction.</p>
-            <div class="tag-row"><span class="tag">Structural Design</span><span class="tag">US Residential</span></div>
-            <dl class="project-meta">
-              <div><dt>Client</dt><dd>Trio Construction</dd></div>
-              <div><dt>Year</dt><dd>2026</dd></div>
-              <div class="span-2"><dt>Role</dt><dd>Structural Design Engineer</dd></div>
-            </dl>
-          </div>
-        </article>
-
-        <article class="project-card reveal">
-          <div class="project-thumb"><img src="images/project-mandir-nagarjun.jpg" alt="Aadheshwor Mandir — DPR" /></div>
-          <div class="project-body">
-            <h3>Aadheshwor Mandir — DPR</h3>
-            <p class="project-loc">Nagarjun Municipality, Kathmandu</p>
-            <p class="project-scope">Detailed Project Report for temple construction and landscaping works, including cost estimation and sanitary design.</p>
-            <div class="tag-row"><span class="tag">Cost Estimation</span><span class="tag">Sanitary Design</span><span class="tag">Government DPR</span></div>
-            <dl class="project-meta">
-              <div><dt>Client</dt><dd>Office of the Municipal Executive, Nagarjun</dd></div>
-              <div><dt>Year</dt><dd>2026</dd></div>
-              <div class="span-2"><dt>Role</dt><dd>Civil Engineer / Quantity Estimator</dd></div>
-            </dl>
-          </div>
-        </article>
-
-        <article class="project-card reveal">
-          <div class="project-thumb"><img src="images/project-sportsfield-bhanu.jpg" alt="Kauretar Sports Field — Masterplan" /></div>
-          <div class="project-body">
-            <h3>Kauretar Sports Field — Masterplan</h3>
-            <p class="project-loc">Bhanu Municipality, Gandaki</p>
-            <p class="project-scope">Masterplan preparation for a municipal sports field, with detailed cost estimation.</p>
-            <div class="tag-row"><span class="tag">Masterplanning</span><span class="tag">Cost Estimation</span></div>
-            <dl class="project-meta">
-              <div><dt>Client</dt><dd>Office of the Municipal Executive, Bhanu</dd></div>
-              <div><dt>Year</dt><dd>2026</dd></div>
-              <div class="span-2"><dt>Role</dt><dd>Civil Engineer / Quantity Estimator</dd></div>
-            </dl>
-          </div>
-        </article>
-
-        <article class="project-card reveal">
-          <div class="project-thumb"><img src="images/project-mandir-kmc.jpg" alt="Kedareswor Mandir (Seto Shivalinga) — DPR" /></div>
-          <div class="project-body">
-            <h3>Kedareswor Mandir (Seto Shivalinga) — DPR</h3>
-            <p class="project-loc">Gyaneshwor, KMC Ward 30</p>
-            <p class="project-scope">Consultancy services preparing the DPR, with cost estimation and sanitary design and drawing.</p>
-            <div class="tag-row"><span class="tag">Government DPR</span><span class="tag">Cost Estimation</span></div>
-            <dl class="project-meta">
-              <div><dt>Client</dt><dd>Kathmandu Metropolitan City</dd></div>
-              <div><dt>Year</dt><dd>2025</dd></div>
-              <div class="span-2"><dt>Role</dt><dd>Civil Engineer / Quantity Estimator</dd></div>
-            </dl>
-          </div>
-        </article>
-
-        <article class="project-card reveal">
-          <div class="project-thumb"><img src="images/project-grvt-dhanusha.jpg" alt="Ground Reservoir Tank & Office Building" /></div>
-          <div class="project-body">
-            <h3>Ground Reservoir Tank & Office Building</h3>
-            <p class="project-loc">Lalgadh, Mithila Municipality-10, Dhanusha</p>
-            <p class="project-scope">Detailed engineering design of a ground reservoir tank (GRVT) and office building.</p>
-            <div class="tag-row"><span class="tag">Water Infrastructure</span><span class="tag">Detailed Design</span></div>
-            <dl class="project-meta">
-              <div><dt>Client</dt><dd>Shree Lalgadh Water Supply & Sanitation Users' Committee</dd></div>
-              <div><dt>Year</dt><dd>2023</dd></div>
-              <div class="span-2"><dt>Role</dt><dd>Civil Engineer / Quantity Estimator</dd></div>
-            </dl>
-          </div>
-        </article>
-
+      <div id="dynamic-project-grid" class="project-grid">
+        <!-- Dynamically populated from /api/projects -->
       </div>
     </div>
   </section>
@@ -610,6 +508,7 @@
         </div>
 
         <div class="reveal">
+          <div id="contact-status" class="contact-status"></div>
           <form id="contact-form" class="contact-form">
             <div class="field">
               <label for="name">Name</label>
@@ -620,10 +519,14 @@
               <input id="email" name="email" type="email" required />
             </div>
             <div class="field">
+              <label for="subject">Subject</label>
+              <input id="subject" name="subject" type="text" placeholder="Project Inquiry / Consultation" />
+            </div>
+            <div class="field">
               <label for="message">Message</label>
               <textarea id="message" name="message" rows="5" required></textarea>
             </div>
-            <button type="submit" class="btn btn-signal" style="align-self:flex-start;">Send Message</button>
+            <button type="submit" id="contact-submit-btn" class="btn btn-signal" style="align-self:flex-start;">Send Message</button>
           </form>
         </div>
       </div>
@@ -631,6 +534,18 @@
   </section>
 
 </main>
+
+<!-- ============================= PROJECT DETAIL MODAL ============================= -->
+<div id="project-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-project-title">
+  <div class="modal-container">
+    <button id="modal-close" class="modal-close-btn" aria-label="Close modal">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div id="modal-content" class="modal-body">
+      <!-- Dynamically filled on project click -->
+    </div>
+  </div>
+</div>
 
 <!-- ============================= FOOTER ============================= -->
 <footer class="site-footer">
