@@ -1,0 +1,14 @@
+{
+  "name": "sandeep-aryal-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio of Er. Sandeep Aryal — Civil / Structural Engineer",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "echo 'Static site, no build step required'",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
