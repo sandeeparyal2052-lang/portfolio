@@ -1,10 +1,8 @@
 /* ==========================================================================
    SANDEEP ARYAL — PORTFOLIO SCRIPT
-   Dynamic client-side functionality. Connects to backend API endpoints:
-   - GET /api/projects (search & category filtering)
-   - GET /api/projects/:id (project modal specs)
-   - POST /api/contact (contact form submission & backend storage)
-   - POST /api/calculator/deck-joist (dynamic structural engineering calculator)
+   Vanilla JS, no build step, no dependencies. Handles: dark/light mode,
+   mobile nav toggle, gallery filtering, scroll-reveal animations, and the
+   contact form (which opens a pre-filled email — see initContactForm).
    ========================================================================== */
 
 (function () {
@@ -14,7 +12,6 @@
   function initTheme() {
     var toggleBtn = document.getElementById("theme-toggle");
     var root = document.documentElement;
-    if (!toggleBtn) return;
 
     function applyIcon(isDark) {
       toggleBtn.innerHTML = isDark
@@ -30,7 +27,7 @@
       try {
         localStorage.setItem("theme", isDark ? "dark" : "light");
       } catch (e) {
-        /* localStorage unavailable */
+        /* localStorage unavailable — theme just won't persist */
       }
     });
   }
@@ -39,7 +36,6 @@
   function initMobileNav() {
     var toggleBtn = document.getElementById("mobile-nav-toggle");
     var menu = document.getElementById("mobile-nav");
-    if (!toggleBtn || !menu) return;
 
     toggleBtn.addEventListener("click", function () {
       var isOpen = menu.classList.toggle("open");
@@ -55,12 +51,15 @@
   }
 
   /* ---------- Hero background slideshow ---------- */
+  // Cross-fades through the construction-site / line-diagram scenes behind
+  // the hero content. Add or remove slides by editing the .hero-bg-slide
+  // divs in index.html — this just cycles whichever ones are present.
   function initHeroBackground() {
     var slides = document.querySelectorAll(".hero-bg-slide");
     if (slides.length < 2) return;
 
     var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) return; // leave the first slide static
 
     var current = 0;
     setInterval(function () {
@@ -70,261 +69,16 @@
     }, 4000);
   }
 
-  /* ---------- Dynamic Projects & Search/Filter ---------- */
-  var currentCategory = "All";
-  var currentSearch = "";
-
-  function fetchAndRenderProjects() {
-    var grid = document.getElementById("dynamic-project-grid");
-    if (!grid) return;
-
-    grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted); font-family:var(--font-mono);">Loading dynamic projects...</div>';
-
-    var url = "/api/projects?category=" + encodeURIComponent(currentCategory) + "&search=" + encodeURIComponent(currentSearch);
-
-    fetch(url)
-      .then(function (res) {
-        if (!res.ok) throw new Error("Failed to load projects");
-        return res.json();
-      })
-      .then(function (resData) {
-        if (!resData.success || !resData.data.length) {
-          grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted); font-family:var(--font-mono);">No matching projects found. Try adjusting your filter or search query.</div>';
-          return;
-        }
-
-        var html = "";
-        resData.data.forEach(function (proj) {
-          var tagsHtml = (proj.tags || []).map(function (t) {
-            return '<span class="tag">' + t + '</span>';
-          }).join('');
-
-          html += `
-            <article class="project-card reveal is-visible" data-id="${proj.id}">
-              <div class="project-thumb">
-                <img src="${proj.thumb || proj.image}" alt="${proj.title}" loading="lazy" />
-              </div>
-              <div class="project-body">
-                <h3>${proj.title}</h3>
-                <p class="project-loc">${proj.location}</p>
-                <p class="project-scope">${proj.scope}</p>
-                <div class="tag-row">${tagsHtml}</div>
-                <dl class="project-meta">
-                  <div><dt>Client</dt><dd>${proj.client}</dd></div>
-                  <div><dt>Year</dt><dd>${proj.year}</dd></div>
-                  <div class="span-2"><dt>Role</dt><dd>${proj.role}</dd></div>
-                </dl>
-              </div>
-            </article>
-          `;
-        });
-
-        grid.innerHTML = html;
-
-        // Attach click listeners to open modal
-        grid.querySelectorAll(".project-card").forEach(function (card) {
-          card.addEventListener("click", function () {
-            var projId = card.getAttribute("data-id");
-            openProjectModal(projId);
-          });
-        });
-      })
-      .catch(function (err) {
-        console.error(err);
-        grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--signal); font-family:var(--font-mono);">Error loading projects from backend API.</div>';
-      });
-  }
-
-  function initDynamicProjects() {
-    var filterContainer = document.getElementById("project-filter-row");
-    var searchInput = document.getElementById("project-search-input");
-
-    if (filterContainer) {
-      filterContainer.querySelectorAll(".filter-btn").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          filterContainer.querySelectorAll(".filter-btn").forEach(function (b) {
-            b.classList.remove("active");
-          });
-          btn.classList.add("active");
-          currentCategory = btn.getAttribute("data-category") || "All";
-          fetchAndRenderProjects();
-        });
-      });
-    }
-
-    if (searchInput) {
-      var debounceTimer;
-      searchInput.addEventListener("input", function (e) {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(function () {
-          currentSearch = e.target.value;
-          fetchAndRenderProjects();
-        }, 250);
-      });
-    }
-
-    fetchAndRenderProjects();
-  }
-
-  /* ---------- Project Modal ---------- */
-  function openProjectModal(id) {
-    var modal = document.getElementById("project-modal");
-    var modalContent = document.getElementById("modal-content");
-    if (!modal || !modalContent) return;
-
-    modalContent.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-mono);">Loading details...</div>';
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-
-    fetch("/api/projects/" + id)
-      .then(function (res) { return res.json(); })
-      .then(function (res) {
-        if (!res.success || !res.data) {
-          modalContent.innerHTML = '<p>Project details unavailable.</p>';
-          return;
-        }
-
-        var p = res.data;
-        var codesHtml = (p.codes || []).map(function (c) { return '<span class="chip">' + c + '</span>'; }).join(' ');
-        var softwareHtml = (p.software || []).map(function (s) { return '<span class="chip">' + s + '</span>'; }).join(' ');
-
-        modalContent.innerHTML = `
-          <div class="modal-img-wrapper">
-            <img src="${p.image || p.thumb}" alt="${p.title}" />
-          </div>
-          <h2 class="modal-title" id="modal-project-title">${p.title}</h2>
-          <p style="font-size:14px; color:var(--text-muted); margin:0;">${p.location} · ${p.year}</p>
-
-          <div class="modal-specs">
-            <div><strong>Client:</strong><br/>${p.client}</div>
-            <div><strong>Role:</strong><br/>${p.role}</div>
-            <div><strong>Category:</strong><br/>${p.category}</div>
-          </div>
-
-          <div>
-            <h4 style="font-family:var(--font-display); margin:16px 0 8px;">Engineering Overview</h4>
-            <p style="font-size:15px; line-height:1.6; color:var(--text); margin:0;">${p.description}</p>
-          </div>
-
-          ${codesHtml ? `<div><h4 style="font-family:var(--font-display); margin:16px 0 8px;">Codes & Standards</h4><div class="chip-row">${codesHtml}</div></div>` : ''}
-          ${softwareHtml ? `<div><h4 style="font-family:var(--font-display); margin:16px 0 8px;">Software Used</h4><div class="chip-row">${softwareHtml}</div></div>` : ''}
-        `;
-      })
-      .catch(function (err) {
-        modalContent.innerHTML = '<p style="color:var(--signal);">Failed to load project details.</p>';
-      });
-  }
-
-  function initProjectModal() {
-    var modal = document.getElementById("project-modal");
-    var closeBtn = document.getElementById("modal-close");
-    if (!modal) return;
-
-    function closeModal() {
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-    }
-
-    if (closeBtn) {
-      closeBtn.addEventListener("click", closeModal);
-    }
-
-    modal.addEventListener("click", function (e) {
-      if (e.target === modal) {
-        closeModal();
-      }
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && modal.classList.contains("is-open")) {
-        closeModal();
-      }
-    });
-  }
-
-  /* ---------- Dynamic Contact Form Handler ---------- */
-  function initContactForm() {
-    var form = document.getElementById("contact-form");
-    var statusBox = document.getElementById("contact-status");
-    var submitBtn = document.getElementById("contact-submit-btn");
-    if (!form) return;
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      var nameVal = form.elements["name"].value;
-      var emailVal = form.elements["email"].value;
-      var subjectVal = form.elements["subject"] ? form.elements["subject"].value : "";
-      var messageVal = form.elements["message"].value;
-
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Sending Message...";
-      }
-
-      if (statusBox) {
-        statusBox.className = "contact-status";
-        statusBox.style.display = "none";
-      }
-
-      var payload = {
-        name: nameVal,
-        email: emailVal,
-        subject: subjectVal,
-        message: messageVal
-      };
-
-      fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Send Message";
-          }
-
-          if (statusBox) {
-            if (data.success) {
-              statusBox.className = "contact-status success";
-              statusBox.textContent = "✓ Message sent successfully! Reference ID: " + (data.data ? data.data.id : "msg-ok");
-              form.reset();
-            } else {
-              statusBox.className = "contact-status error";
-              statusBox.textContent = "✕ Error: " + (data.message || "Could not send message.");
-            }
-          }
-        })
-        .catch(function (err) {
-          console.error("Contact API error:", err);
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Send Message";
-          }
-          if (statusBox) {
-            statusBox.className = "contact-status error";
-            statusBox.textContent = "✕ Connection error. Please try again later.";
-          }
-        });
-    });
-  }
-
   /* ---------- Gallery filter ---------- */
   function initGalleryFilter() {
     var buttons = document.querySelectorAll(".filter-btn");
     var items = document.querySelectorAll(".gallery-item");
-    if (!buttons.length || !items.length) return;
+    if (!buttons.length) return;
 
     buttons.forEach(function (btn) {
-      if (btn.closest("#project-filter-row")) return; // skip project filter row
-
       btn.addEventListener("click", function () {
         buttons.forEach(function (b) {
-          if (!b.closest("#project-filter-row")) b.classList.remove("active");
+          b.classList.remove("active");
         });
         btn.classList.add("active");
 
@@ -360,8 +114,28 @@
     );
 
     elements.forEach(function (el, i) {
-      el.style.transitionDelay = (i % 4) * 70 + "ms";
+      el.style.animationDelay = (i % 4) * 60 + "ms";
       observer.observe(el);
+    });
+  }
+
+  /* ---------- Contact form ---------- */
+  // No backend is wired up. Submitting opens the visitor's email client with
+  // the message pre-filled. To collect submissions directly, swap this for a
+  // real form handler (e.g. Formspree, Netlify Forms, or a small server).
+  function initContactForm() {
+    var form = document.getElementById("contact-form");
+    if (!form) return;
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var name = form.elements["name"].value;
+      var email = form.elements["email"].value;
+      var message = form.elements["message"].value;
+
+      var subject = encodeURIComponent("Portfolio inquiry from " + (name || "website visitor"));
+      var body = encodeURIComponent(message + "\n\n\u2014 " + name + " (" + email + ")");
+      window.location.href = "mailto:er.sandeeparyal@gmail.com?subject=" + subject + "&body=" + body;
     });
   }
 
@@ -384,8 +158,6 @@
     initTheme();
     initMobileNav();
     initHeroBackground();
-    initDynamicProjects();
-    initProjectModal();
     initGalleryFilter();
     initScrollReveal();
     initContactForm();
