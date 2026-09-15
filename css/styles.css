@@ -159,6 +159,24 @@ html.dark .title-block {
   color: var(--text);
   margin: 4px 0 0;
 }
+.title-block dd a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(46, 110, 158, 0.4);
+  text-underline-offset: 2px;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+.title-block dd a:hover {
+  color: var(--signal);
+  text-decoration-color: var(--signal);
+}
+html.dark .title-block dd a {
+  text-decoration-color: rgba(140, 178, 204, 0.4);
+}
+html.dark .title-block dd a:hover {
+  color: var(--signal-light);
+  text-decoration-color: var(--signal-light);
+}
 .title-block .span-2 {
   grid-column: span 2;
 }
